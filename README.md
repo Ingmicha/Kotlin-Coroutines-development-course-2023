@@ -31,25 +31,30 @@
 * runBlocking - creates a Scope and tuns a coroutine in a blocking way 
 * coroutineScope {} - creates a new scope does not complete until all children coroutines complete
 
-		runBlocking{
-			launch{
-				deleay(1000L)
-				println("Blocking task")
-			}
-		}
-==
-	
-		GlobalScope.launch{
-			delay(1000L)
-			println("Global scope")
-		}
-==	
-	
-		coroutineScope{
-			delay(1000L)
-			println("custom coroutine scope")
-		}
-		
+```kotlin
+runBlocking{
+	launch{
+		deleay(1000L)
+		println("Blocking task")
+	}
+}
+```
+
+```kotlin
+GlobalScope.launch{
+	delay(1000L)
+	println("Global scope")
+}
+```
+
+```kotlin
+coroutineScope{
+	delay(1000L)
+	println("custom coroutine scope")
+}
+
+```	
+				
 		
 ##Context
 
@@ -64,14 +69,17 @@
 * Functions thaat can be run a coroutine
 * Make callbacks seamless
 
-
-		suspend fun sayHello(){
-			printlv("Hello!")
-		}
+```kotlin
+suspend fun sayHello(){
+	printlv("Hello!")
+}
+```
+```kotlin
+GlobalScope.launch{
+	sayHello()
+}
+```
 		
-		GlobalScope.launch{
-			sayHello()
-		}
 
 
 ##Jobs
@@ -80,20 +88,22 @@
 * Allows us to manipulate the coroutine lifecycle
 * Live in the hierarche of others Jobs both as parents or children
 
-			Job{
-				Job{}
-				Job{
-					Job{}
-				}
-			}
-			
-			val job1 = GlobalScope.launch{
-				coroutineScope{
-					val job2 = launch{
-						//processing
-					}
-				}
-			}
+```kotlin
+Job{
+	Job{}
+	Job{
+		Job{}
+	}
+}
+	
+val job1 = GlobalScope.launch{
+	coroutineScope{
+		val job2 = launch{
+			//processing
+		}
+	}
+}
+```
 
 * Can access lifecycle variables and methods
 	* cancel()
@@ -107,10 +117,11 @@
 * A dispatchers determines which thread od thread pool the coroutine runs on
 * Different dispatchers are available depending on the task specifity
 
-
-		launch(Dispatchers.Default){
-			//do some CPU intensive processing task here
-		}
+```kotlin
+launch(Dispatchers.Default){
+	//do some CPU intensive processing task here
+}
+```
 
 * Common dispatchers:
 	* Main
@@ -134,16 +145,15 @@
 	*	If the vaue is available, it will return inmediately
 	* If the vaule is not available, it will pause the thread until it is
 
-===
-	
-		suspend fun getRandom()= Random.nextInt(1000)
-			
-===
+```kotlin
+suspend fun getRandom()= Random.nextInt(1000)
+```
 
-		val valueDeferred = GlobalScope.async{ getRandom()}
-		//Do some processing here
-		val finalValue = valueDeferred.await()
-			
+```kotlin
+val valueDeferred = GlobalScope.async{ getRandom()}
+//Do some processing here
+val finalValue = valueDeferred.await()
+```
 			 
 
 ##withContext
@@ -152,14 +162,15 @@
 * Easlily switch between dispatchers
 * Vary lightweight
 
-
-		launch(Dispatchers.Default){
-			//default context
-			withCotext(Dispatchers.IO){
-				//IO Context
-			}
-			//back to default context
-		}
+```kotlin
+launch(Dispatchers.Default){
+	//default context
+	withCotext(Dispatchers.IO){
+		//IO Context
+	}
+	//back to default context
+}
+```
 
 ##Exception handling
 
@@ -175,22 +186,22 @@
 	* Try-catch in the coroutine or in the await() call
 
 
-===
-	
-		val myHandler =.CoroutineExceptionHandler{coroutineContext, throwable->//handle exception}
-		
-===
-		
-		launch(myHandler){
-			//do some task here
-			throw IndexOutOfBoundException()
-			}
-===
-	
-		launch(Dispatchers.default +myHndler){
-			//do some task here
-			throw IndexOutOfBoundException()
-			}
+```kotlin
+val myHandler =.CoroutineExceptionHandler{coroutineContext, throwable->//handle exception}
+```
+
+```kotlin		
+launch(myHandler){
+	//do some task here
+	throw IndexOutOfBoundException()
+}
+```
+```kotlin	
+launch(Dispatchers.default +myHndler){
+	//do some task here
+	throw IndexOutOfBoundException()
+}
+```
 
 
 
