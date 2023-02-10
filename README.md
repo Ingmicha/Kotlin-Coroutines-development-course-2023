@@ -37,15 +37,13 @@
 				println("Blocking task")
 			}
 		}
-	
-	===
+==
 	
 		GlobalScope.launch{
 			delay(1000L)
 			println("Global scope")
 		}
-		
-	===	
+==	
 	
 		coroutineScope{
 			delay(1000L)
